@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<context:annotation-config />
+
+	<bean class="com.vdranik.observer.bean.MyBeanPostProcessor" />
+
+	<bean
+		class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="location" value="concreteObserver.properties" />
+	</bean>
+
+	<bean id="concreteObserver1" class="com.vdranik.observer.bean.ConcreteObserver" init-method="init" destroy-method="destroy" scope="prototype">
+		<constructor-arg value="${value1}"></constructor-arg>
+	</bean>
+
+	<bean id="concreteObserver2" class="com.vdranik.observer.bean.ConcreteObserver" init-method="init" destroy-method="destroy" scope="prototype">
+		<constructor-arg value="#{systemProperties['user.home']}"></constructor-arg>                       <!-- //#{systemProperties['concreteObserver.name']} -->
+	</bean>
+
+	<bean id="concreteSubject1" class="com.vdranik.observer.bean.ConcreteSubject"
+		init-method="init" destroy-method="destroy">
+		<property name="observers">
+			<list value-type="com.vdranik.spring.observer.Observer">
+				<ref bean="concreteObserver1" />
+				<ref bean="concreteObserver2" />
+			</list>
+		</property>
+	</bean>
+	
+		<bean id="concreteSubject2" class="com.vdranik.observer.bean.ConcreteSubject"
+		init-method="init" destroy-method="destroy">
+		<property name="observers">
+			<list value-type="com.vdranik.spring.observer.Observer">
+				<null/>
+			</list>
+		</property>
+	</bean>
+
+</beans>
