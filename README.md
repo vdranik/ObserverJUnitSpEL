@@ -1,0 +1,3 @@
+# ObserverJUnitSpEL
+ObserverJUnitSpEL.
+Training project.
